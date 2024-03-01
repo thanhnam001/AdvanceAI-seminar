@@ -1,0 +1,8 @@
+data_dir: ./data
+optimizer: sgd
+seed: 42
+optim: sgd
+batch_size: 128
+epochs: 2
+learning_rate: 0.1
+summary: False

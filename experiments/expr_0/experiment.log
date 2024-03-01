@@ -1,0 +1,11 @@
+2024-03-01 00:07:32,308 [INFO] Currently using cuda
+2024-03-01 00:07:32,440 [INFO] Train step:468, Val steps:78
+2024-03-01 00:08:36,307 [INFO] [INFO] EPOCHS: 1/2
+2024-03-01 00:08:36,317 [INFO] Train loss 2.786376, Train accuracy: 0.3129
+2024-03-01 00:08:36,317 [INFO] Val loss: 0.936573, Val accuracy: 0.7013
+
+2024-03-01 00:09:26,711 [INFO] [INFO] EPOCHS: 2/2
+2024-03-01 00:09:26,712 [INFO] Train loss 0.420813, Train accuracy: 0.8675
+2024-03-01 00:09:26,712 [INFO] Val loss: 0.492254, Val accuracy: 0.8472
+
+2024-03-01 00:09:26,712 [INFO] [INFO] total time taken to train the model: 113.78s
