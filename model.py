@@ -7,6 +7,7 @@ import logging
 import yaml
 from tqdm import tqdm
 from pathlib import Path
+from importlib import reload
 
 import numpy as np
 import pandas as pd
@@ -115,6 +116,7 @@ class cfg:
       return self.name + ": " + self.url
 
 if __name__=='__main__':
+    reload(logging)
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir',type=str)
     parser.add_argument('--optim',type=str)
