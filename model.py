@@ -99,6 +99,13 @@ def read_default_configs():
         configs = yaml.safe_load(f)
     return configs
 
+def get_field_cfg(cfg, field):
+    field_cfg = {}
+    for key, value in cfg.items():
+        if key.startswith(cfg[field]) and key!= cfg[field]:
+            new_key = '_'.join(key.split('_')[1:])
+            field_cfg[new_key] = value
+    return field_cfg
 class cfg:
     def __init__(self, d=None):
         if d is not None:
@@ -128,8 +135,11 @@ if __name__=='__main__':
         ]
     )
     # Configs
+    args = vars(args)
+    args = {k: v for k, v in args.items() if v is not None}
     default_configs = read_default_configs()
-    default_configs.update(vars(args))
+    default_configs.update(args)
+    optim_cfg = get_field_cfg(default_configs, 'optimizer')
     configs = cfg(default_configs)
     # Seed and device
     seed_torch(configs.seed)
@@ -146,11 +156,12 @@ if __name__=='__main__':
     # Model
     model = get_model(device)
     criterion = nn.CrossEntropyLoss()
-    optim = getattr(importlib.import_module('optimizer'), configs.optim)
+    optim = getattr(importlib.import_module('optimizer'), configs.optimizer)
     optimizer = optim(model.parameters(),
                         lr=configs.learning_rate,
+                        **optim_cfg,
                     )
-
+    
     history = {
         'train_loss': [],
         'train_acc': [],
@@ -212,7 +223,7 @@ if __name__=='__main__':
     draw_log(history, expr_dir)
     df = pd.DataFrame.from_dict(history)
     df.rename(columns={df.columns[0]:'ID'}).to_csv(Path(expr_dir)/'history.csv')
-
+    torch.save(model.state_dict(), Path(expr_dir)/'model.pt')
     with open(Path(expr_dir)/'configs.yaml', 'w') as file:
         for key, val in vars(configs).items():
             file.write(f'{key}: {val}\n')
