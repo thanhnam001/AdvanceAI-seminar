@@ -112,14 +112,14 @@ class cfg:
         if d is not None:
             for key, value in d.items():
                 setattr(self, key, value)
-    def __repr__(self):
-      return self.name + ": " + self.url
-
+    # def __repr__(self):
+    #     return {key: val for key, val in self.item()}
+    
 if __name__=='__main__':
     reload(logging)
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir',type=str)
-    parser.add_argument('--optim',type=str)
+    parser.add_argument('--optimizer',type=str)
     parser.add_argument('--batch_size',type=int)
     parser.add_argument('--seed',type=int)
     parser.add_argument('--epochs',type=int)
