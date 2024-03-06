@@ -61,8 +61,11 @@ def data_loader(data_dir,
                                                 shuffle=False)
     return train_dataloader, test_dataloader
 
-def get_model(device):
-    model = efficientnet_b2(weights='DEFAULT')
+def get_model(pretrained,device):
+    if pretrained:
+        model = efficientnet_b2(weights='DEFAULT')
+    else:
+        model = efficientnet_b2()
     model._fc = torch.nn.Linear(1280, 10)
     return model.to(device)
 
@@ -119,6 +122,7 @@ if __name__=='__main__':
     reload(logging)
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir',type=str)
+    parser.add_argument('--pretrained',type=bool)
     parser.add_argument('--optimizer',type=str)
     parser.add_argument('--batch_size',type=int)
     parser.add_argument('--seed',type=int)
@@ -156,7 +160,8 @@ if __name__=='__main__':
     val_steps = len(val_dataloader.dataset) // configs.batch_size
     logging.info(f'Train step:{train_steps}, Val steps:{val_steps}')
     # Model
-    model = get_model(device)
+    model = get_model(configs.pretrained, device)
+    logging.info(f'Use pretrained model: {configs.pretrained}')
     criterion = nn.CrossEntropyLoss()
     optim = getattr(importlib.import_module('optimizer'), configs.optimizer)
     optimizer = optim(model.parameters(),

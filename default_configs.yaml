@@ -1,4 +1,5 @@
 data_dir: "./data"
+pretrained: true
 seed: 42
 batch_size: 128
 epochs: 2
