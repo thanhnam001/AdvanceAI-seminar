@@ -8,6 +8,7 @@ import yaml
 from tqdm import tqdm
 from pathlib import Path
 from importlib import reload
+from distutils.util import strtobool
 
 import numpy as np
 import pandas as pd
@@ -122,7 +123,7 @@ if __name__=='__main__':
     reload(logging)
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir',type=str)
-    parser.add_argument('--pretrained',type=bool)
+    parser.add_argument('--pretrained',type=lambda x: bool(strtobool(x)))
     parser.add_argument('--optimizer',type=str)
     parser.add_argument('--batch_size',type=int)
     parser.add_argument('--seed',type=int)
@@ -147,6 +148,9 @@ if __name__=='__main__':
     default_configs.update(args)
     optim_cfg = get_field_cfg(default_configs, 'optimizer')
     configs = cfg(default_configs)
+    print(args)
+    print(default_configs)
+    print(vars(configs))
     # Seed and device
     seed_torch(configs.seed)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -162,6 +166,7 @@ if __name__=='__main__':
     # Model
     model = get_model(configs.pretrained, device)
     logging.info(f'Use pretrained model: {configs.pretrained}')
+    exit()
     criterion = nn.CrossEntropyLoss()
     optim = getattr(importlib.import_module('optimizer'), configs.optimizer)
     optimizer = optim(model.parameters(),
